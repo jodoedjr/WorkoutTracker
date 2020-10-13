@@ -55,7 +55,7 @@ app.put("/api/workouts/:id", (req, res) => {
           type: req.body.type,
           name: req.body.name,
           duration: req.body.duration,
-          weight: req.body.duration,
+          weight: req.body.weight,
           reps: req.body.reps,
           sets: req.body.sets,
           distance: req.body.distance
