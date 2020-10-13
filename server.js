@@ -31,6 +31,7 @@ app.get("/stats", (req , res) => {
 app.get("/api/workouts", (req, res) => {
   db.Workout.find()
   .then(dbWorkout => {
+    console.log(dbWorkout);//[0].totalDuration);
     res.json(dbWorkout);
   })
   .catch(err => {
@@ -39,8 +40,14 @@ app.get("/api/workouts", (req, res) => {
 });
 
 app.get("/api/workouts/range", (req, res) => {
-  db.Workout.find()
+  
+  let t = new Date(new Date().setDate(new Date().getDate())); // gets todays date in time code format
+  t.setDate(t.getDate() - t.getDay()); // sets var to Sundays date, safetly with respect to daylight savings time
+  t.setHours(0, 0, 0)
+  console.log(t)
+  db.Workout.find({ day: { $gte: t} }) // find workouts on dates greater than t, last sunday
   .then(dbWorkout => {
+    //console.log(dbWorkout[dbWorkout.length -1].day > t);
     res.json(dbWorkout);
   })
   .catch(err => {
