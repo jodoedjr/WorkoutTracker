@@ -3,7 +3,7 @@ MongoDB/Mongoose Workout Activity Tracker
 
 ## Description 
 
-WorkoutTracker uses Mongoose/MongoDB Atlas to track stats about the users workout regimen. Users can add resistance(weights) or cardio exercises to an existing workout, create a new workout, or view stats for the week (starting on the most recent Sunday).
+WorkoutTracker uses Mongoose/MongoDB Atlas to track stats about the user's workout regimen. Users can add resistance(weights) or cardio exercises to an existing workout, create a new workout, or view stats for the week (starting on the most recent Sunday).
 
 
 ## Table of Contents
