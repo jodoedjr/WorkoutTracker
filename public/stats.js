@@ -215,7 +215,7 @@ function duration(data) {
     durations.push(0);//push 0
     workout.exercises.forEach(exercise => {
       durations[wIndex] += exercise.duration;
-      
+
     });
   });
   return durations;
@@ -223,11 +223,12 @@ function duration(data) {
 
 function calculateTotalWeight(data) {
   let total = [];
-
   data.forEach((workout, wIndex) => {
     total.push(0);
     workout.exercises.forEach(exercise => {
-      total[wIndex] += exercise.weight;
+      if (exercise.weight) {
+        total[wIndex] += exercise.weight;
+      }
     });
   });
 
@@ -239,7 +240,7 @@ function durationPerExercise(data) {
   data.forEach((workout, wIndex) => {
     workout.exercises.forEach(exercise => {
       durations.push(exercise.duration);
-      
+
     });
   });
   return durations;
