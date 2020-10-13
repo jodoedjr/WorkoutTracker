@@ -53,11 +53,13 @@ function organizeByDay(data) {//organize data into days
   return returnData;
 }
 
-function populateChart(inputData) {
-  const data = organizeByDay(inputData);
-  let durations = duration(data);
-  let pounds = calculateTotalWeight(data);
-  let workouts = workoutNames(data);
+function populateChart(data) {
+  const organizedData = organizeByDay(data);
+  let durations = duration(organizedData);
+  let excerciseDurations = durationPerExercise(data);
+  let pounds = calculateTotalWeight(organizedData);
+  let excercisePounds = weightPerExercise(data);
+  let workouts = workoutNames(data);  // not organized by day
   const colors = generatePalette();
 
   let line = document.querySelector("#canvas").getContext("2d");
@@ -174,7 +176,7 @@ function populateChart(inputData) {
         {
           label: "Excercises Performed",
           backgroundColor: colors,
-          data: durations
+          data: excerciseDurations
         }
       ]
     },
@@ -194,7 +196,7 @@ function populateChart(inputData) {
         {
           label: "Excercises Performed",
           backgroundColor: colors,
-          data: pounds
+          data: excercisePounds
         }
       ]
     },
@@ -226,6 +228,28 @@ function calculateTotalWeight(data) {
     total.push(0);
     workout.exercises.forEach(exercise => {
       total[wIndex] += exercise.weight;
+    });
+  });
+
+  return total;
+}
+
+function durationPerExercise(data) {
+  let durations = [];
+  data.forEach((workout, wIndex) => {
+    workout.exercises.forEach(exercise => {
+      durations.push(exercise.duration);
+      
+    });
+  });
+  return durations;
+}
+
+function weightPerExercise(data) {
+  let total = [];
+  data.forEach((workout, wIndex) => {
+    workout.exercises.forEach(exercise => {
+      total.push(exercise.weight);
     });
   });
 
