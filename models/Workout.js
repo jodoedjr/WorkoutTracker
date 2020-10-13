@@ -6,23 +6,26 @@ const ExerciseSchema = new Schema({
   type: String,
   name: String,
   duration: Number,
-  weigth: Number,
+  weight: Number,
   reps: Number,
   sets: Number,
   distance: Number
 })
 
 const WorkoutSchema = new Schema({
-  day: Date,
+  day: {
+    type: Date,
+    default: new Date(new Date().setDate(new Date().getDate()))
+  },
   exercises: [ExerciseSchema]
 });
 
 WorkoutSchema.virtual("totalDuration").get(function () {
   let totalDuration = 0;
+  // forEach on exercises did not work here - maybe something is going on between mongoose and arrays of length 1
   for(let i = 0; i < this.exercises.length; i++){
     totalDuration += this.exercises[i].duration;
   }
-  // forEach on exercises did not work here - does forEach not work on arrays of length 1?
   return totalDuration;
 });
 

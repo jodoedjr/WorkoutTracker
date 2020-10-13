@@ -11,8 +11,8 @@ fetch("/api/workouts/range")
 
 API.getWorkoutsInRange()
 
-  function generatePalette() {
-    const arr = [
+function generatePalette() {
+  const arr = [
     "#003f5c",
     "#2f4b7c",
     "#665191",
@@ -32,8 +32,29 @@ API.getWorkoutsInRange()
   ]
 
   return arr;
+}
+function organizeByDay(data) {//organize data into days
+  let t = new Date(new Date().setDate(new Date().getDate())); // gets todays date in time code format
+  t.setDate(t.getDate() - t.getDay()); // sets var to Sundays date, safetly with respect to daylight savings time
+  t.setHours(0, 0, 0); // zero out hours, minutes, seconds
+  let t2 = new Date(t);
+  let returnData = []; // create returnData, an array with the same format as data with exercises consolidated by day (also no mongo db id's)
+  for (let i = 0; i < 7; i++) { //0 sunday to 6 saturday
+    returnData.push({
+      day: new Date(t2.setDate(t.getDate() + i)), // add i (0-6) number of days since t (sunday)
+      exercises: []
+    });
   }
-function populateChart(data) {
+  data.forEach(workout => {
+    let diff = Math.floor((new Date(workout.day).getTime() - t.getTime()) / (1000 * 60 * 60 * 24), 0); //returns integer number of days since sunday (0 - 6)
+    // add exercises from this workout to the appropriate day
+    returnData[diff].exercises.push(...workout.exercises);
+  });
+  return returnData;
+}
+
+function populateChart(inputData) {
+  const data = organizeByDay(inputData);
   let durations = duration(data);
   let pounds = calculateTotalWeight(data);
   let workouts = workoutNames(data);
@@ -188,22 +209,23 @@ function populateChart(data) {
 
 function duration(data) {
   let durations = [];
-
-  data.forEach(workout => {
+  data.forEach((workout, wIndex) => {
+    durations.push(0);//push 0
     workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
+      durations[wIndex] += exercise.duration;
+      
     });
   });
-
   return durations;
 }
 
 function calculateTotalWeight(data) {
   let total = [];
 
-  data.forEach(workout => {
+  data.forEach((workout, wIndex) => {
+    total.push(0);
     workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
+      total[wIndex] += exercise.weight;
     });
   });
 
@@ -218,6 +240,6 @@ function workoutNames(data) {
       workouts.push(exercise.name);
     });
   });
-  
+
   return workouts;
 }

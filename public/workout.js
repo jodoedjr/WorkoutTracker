@@ -24,7 +24,7 @@ function tallyExercises(exercises) {
     if (curr.type === "resistance") {
       acc.totalWeight = (acc.totalWeight || 0) + curr.weight;
       acc.totalSets = (acc.totalSets || 0) + curr.sets;
-      acc.totalReps = (acc.totalReps || 0) + curr.reps;
+      acc.totalReps = (acc.totalReps || 0) + curr.sets * curr.reps;//curr.reps; // total reps should be # of reps * # of sets 
     } else if (curr.type === "cardio") {
       acc.totalDistance = (acc.totalDistance || 0) + curr.distance;
     }
